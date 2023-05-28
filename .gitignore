@@ -1,0 +1,4 @@
+pgdata/
+docker/data/*
+node_modules/
+dist/
