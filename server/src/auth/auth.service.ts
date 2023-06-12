@@ -2,6 +2,7 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
@@ -12,24 +13,28 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
-    private jwtService: JwtService,
-    private configService: ConfigService,
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+    private readonly logger: Logger,
   ) {}
 
   async signIn(email: string, password: string) {
-    const user = await this.usersService.findOne(email);
-    const isCorrectPassword = await bcrypt.compare(
-      password,
-      user?.password ?? '',
-    );
-    if (isCorrectPassword === false) {
-      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+    try {
+      const user = await this.usersService.findOne(email);
+      const isCorrectPassword = await bcrypt.compare(
+        password,
+        user?.password ?? '',
+      );
+      if (isCorrectPassword === false) {
+        throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+      }
+      const payload = { sub: user.id, email: user.email };
+      const accessToken = await this.jwtService.signAsync(payload);
+      return accessToken;
+    } catch (error) {
+      this.logger.error(error);
     }
-    const payload = { sub: user.id, email: user.email };
-    const accessToken = await this.jwtService.signAsync(payload);
-
-    return accessToken;
   }
 
   async signUp(data: { email: string; password: string; username: string }) {
