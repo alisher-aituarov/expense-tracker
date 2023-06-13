@@ -4,7 +4,7 @@
 sudo chmod -R 777 /home/projects/expense-tracker
 
 #navigate into our working directory where we have all our github files
-cd /home/projects/expense-tracker
+cd /home/projects/expense-tracker/server
 
 #add npm and node to path
 export NVM_DIR="$HOME/.nvm"	
