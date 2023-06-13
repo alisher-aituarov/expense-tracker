@@ -1,5 +1,6 @@
 #!/bin/bash
 
+mkdir -p /home/projects/expense-tracker
 #give permission for everything in the express-app directory
 sudo chmod -R 777 /home/projects/expense-tracker
 
@@ -15,4 +16,4 @@ export NVM_DIR="$HOME/.nvm"
 npm install
 
 #start our node app in the background
-node app.js > app.out.log 2> app.err.log < /dev/null & 
+npm run pm2:deploy:app  > app.out.log 2> app.err.log < /dev/null & 
