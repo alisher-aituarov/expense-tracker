@@ -8,8 +8,8 @@ nvm install node
 #create our working directory if it doesnt exist
 DIR="/home/projects/expense-tracker"
 if [ -d "$DIR" ]; then
-  echo "${DIR} exists"
+  echo "${DIR} exists."
 else
-  echo "Creating ${DIR} directory"
+  echo "Creating ${DIR} directory."
   mkdir -p ${DIR}
 fi
