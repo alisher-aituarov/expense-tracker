@@ -14,6 +14,7 @@ export NVM_DIR="$HOME/.nvm"
 #install node modules
 cd server
 npm ci
+npm install pm2 -g
 
 #start our node app in the background
 npm run pm2:deploy:app
