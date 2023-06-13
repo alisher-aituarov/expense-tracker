@@ -1,6 +1,5 @@
 #!/bin/bash
 
-mkdir -p /home/projects/expense-tracker
 #give permission for everything in the express-app directory
 sudo chmod -R 777 /home/projects/expense-tracker
 
