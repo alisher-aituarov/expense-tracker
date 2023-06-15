@@ -2,9 +2,10 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DBService } from './services/db.service';
 import { ValidationPipe } from '@nestjs/common';
-import { WinstonModule } from 'nest-winston';
+import { WinstonModule, utilities } from 'nest-winston';
 import * as winston from 'winston';
 import * as path from 'path';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -14,7 +15,16 @@ async function bootstrap() {
         winston.format.json(),
       ),
       transports: [
-        new winston.transports.Console(),
+        new winston.transports.Console({
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            winston.format.ms(),
+            utilities.format.nestLike('MyApp', {
+              colors: true,
+              prettyPrint: true,
+            }),
+          ),
+        }),
         new winston.transports.File({
           dirname: path.join(__dirname, './../logs/debug/'),
           filename: 'debug.log',
@@ -38,6 +48,8 @@ async function bootstrap() {
   await prismaService.enableShutdownHooks(app);
   // Add request body validation middleware
   app.useGlobalPipes(new ValidationPipe());
+
+  app.use(cookieParser());
 
   await app.listen(4000);
 }
