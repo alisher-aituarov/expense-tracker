@@ -11,13 +11,14 @@ datasource db {
 }
 
 model User {
-  id        Int      @id() @default(autoincrement())
-  email     String   @unique
+  id        Int        @id() @default(autoincrement())
+  email     String     @unique
   password  String
   username  String
   records   Record[]
   notes     Notes[]
-  createdAt DateTime @default(now())
+  Category  Category[]
+  createdAt DateTime   @default(now())
 
   @@map("users")
 }
@@ -25,7 +26,10 @@ model User {
 model Category {
   id        Int      @id @default(autoincrement())
   name      String
+  color     String
   createdAt DateTime @default(now())
+  ownerId   Int
+  owner     User     @relation(fields: [ownerId], references: [id])
 
   @@map("categories")
 }
