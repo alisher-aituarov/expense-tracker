@@ -47,7 +47,7 @@ async function bootstrap() {
   const prismaService = app.get(DBService);
   await prismaService.enableShutdownHooks(app);
   // Add request body validation middleware
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ skipMissingProperties: false }));
 
   app.use(cookieParser());
 
